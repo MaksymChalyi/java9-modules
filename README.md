@@ -59,8 +59,7 @@
 
 ## 🔧 Вимоги
 
-- **Java 21+** (або новіша версія)
-- **Maven 3.6+** або **Gradle 7.0+** (опціонально)
+- **Java 9+** (або новіша версія)
 - **IntelliJ IDEA** / **Eclipse** / **VS Code** з підтримкою Java
 
 ### Перевірка версії Java:
@@ -73,11 +72,18 @@ javac -version
 
 ### 1. Клонування репозиторію
 ```bash
-git clone <repository-url>
+git clone https://github.com/MaksymChalyi/java9-modules.git
 cd modulesProject
 ```
 
-### 2. Компіляція модулів
+### 2. Перевірка версії Java
+```bash
+# Переконайтеся що використовуєте Java 21+
+java -version
+javac -version
+```
+
+### 3. Компіляція модулів
 ```bash
 # Очищення попередніх збірок
 rmdir /s out  # Windows
@@ -107,9 +113,22 @@ jar --create --file out\artifacts\main.enterprise.jar --main-class main.enterpri
 ```
 
 ### 4. Запуск додатку
+
+**Способ 1 (рекомендований):**
 ```bash
-cd out\artifacts
+cd out/artifacts
 java -p . -m main.enterprise
+```
+
+**Способ 2 (з повними шляхами):**
+```bash
+java -p "out/artifacts/main.api.jar;out/artifacts/main.enterprise.jar;out/artifacts/main.labor.market.jar;out/artifacts/main.university.jar" -m main.enterprise
+```
+
+**Способ 3 (альтернативний через classpath):**
+```bash
+cd out/artifacts
+java -cp "main.api.jar;main.enterprise.jar;main.labor.market.jar;main.university.jar" main.enterprise.Main
 ```
 
 ## 📁 Структура проекту
@@ -250,15 +269,20 @@ java --show-module-resolution -p . -m main.enterprise
 
 ### ❌ Error: Module not found
 
-**Проблема:** `java.lang.module.FindException: Module main.enterprise not found`
+**Рішення:** `java.lang.module.FindException: Module main.enterprise not found`
+
+**Проблема:** Модуль не знайдено у module path
 
 **Рішення:**
 ```bash
 # Перевірте що JAR файли в module path
 ls -la out/artifacts/
 
-# Перевірте наявність module-info.class
+# Перевірте наявність module-info.class в JAR
 jar --list --file main.enterprise.jar | grep module-info
+
+# Переконайтеся що всі JAR файли присутні
+java -p out/artifacts --list-modules
 ```
 
 ### ❌ Unsupported major.minor version
@@ -267,7 +291,16 @@ jar --list --file main.enterprise.jar | grep module-info
 
 **Рішення:**
 - Оновіть Java до версії 21+
-- Або перекомпілюйте проект з вашою версією Java
+- Або перекомпілюйте проект з вашою версією Java:
+
+```bash
+# Перевірте версію Java
+java -version
+javac -version
+
+# Якщо версії різні, встановіть JAVA_HOME правильно
+export JAVA_HOME=/path/to/your/jdk
+```
 
 ### ❌ Service provider not found
 
@@ -303,9 +336,9 @@ java --show-module-resolution -p . -m main.enterprise
 
 ## 📞 Контакти
 
-Ваше ім'я - [@your_twitter](https://twitter.com/your_twitter) - email@example.com
+Максим Чалий - maksymchalyi2004@gmail.com
 
-Посилання на проект: [https://github.com/yourusername/modulesProject](https://github.com/yourusername/modulesProject)
+Посилання на проект: [https://github.com/MaksymChalyi/java9-modules.git](https://github.com/MaksymChalyi/java9-modules.git)
 
 ## 🙏 Подяки
 
